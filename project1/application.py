@@ -1,34 +1,11 @@
-#=============================PROJECT 1========================================
-#==========================WEB PROGRAMMING========================
-#=========================NAME: JONNATHAN FABRICIO CRESPO YAGUANA=============
-#==========================DATE: DECEMBER 2019=================================
-
-#=========IMPORT STATEMENTS======================
-
 import os
+
 from flask import Flask, session, render_template, request, jsonify
 from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 import requests
-from functools import wraps #Para login_required
 
-#==============DEFINE A DECORATOR===================
-
-def login_required(f):
-    """
-    Decorate routes to require login.
-
-    http://flask.pocoo.org/docs/1.0/patterns/viewdecorators/
-    """
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if session.get("username") is None:
-            return redirect("/signin")
-        return f(*args, **kwargs)
-    return decorated_function
-
-#=========================================================
 
 
 app = Flask(__name__)
@@ -48,7 +25,15 @@ Session(app)
 engine = create_engine("postgres://kjkmtwcexbgcrx:522c649866896ff5bddbbbb0c53f2dec216fb496e6590bdce81f42e5aba9f313@ec2-174-129-253-47.compute-1.amazonaws.com:5432/d98hjgkripkjc5")
 db = scoped_session(sessionmaker(bind=engine))
 
-#=====================DEFINE ROUTES============================
+#-=====================DEFINE A DECORATOR=======================================
+
+@app.after_request
+def add_header(response):
+    # response.cache_control.no_store = True
+    if 'Cache-Control' not in response.headers:
+        response.headers['Cache-Control'] = 'no-store'
+    return response
+
 @app.route("/")
 def index():
     return render_template("index.html")
@@ -97,12 +82,12 @@ def logout():
     db.execute("UPDATE users SET count_state=False  WHERE (username = :username)", {"username":user1})
     db.commit()
     #close session
-    session.pop('user', None)
+    #session.pop('user', None)
+    session.clear()
     return render_template("index.html")
 
 #Search by isbn
 @app.route("/books_isbn", methods=["POST", "GET"])
-@login_required
 def books_isbn():
     """List all books."""
     isbn=request.form.get("isbn")
@@ -115,7 +100,6 @@ def books_isbn():
 
 #Specific book
 @app.route("/books_isbn/<string:book_isbn>")
-@login_required
 def bookisbn(book_isbn):
     """List details about a single book."""
 
@@ -128,7 +112,6 @@ def bookisbn(book_isbn):
 
 #search by title
 @app.route("/books_title", methods=["POST"])
-@login_required
 def books_title():
     title=request.form.get("title")
     if db.execute("SELECT * FROM books WHERE (title = :title)", {"title":title}).rowcount==0:
@@ -139,7 +122,6 @@ def books_title():
 
 #Specific book
 @app.route("/books_title/<string:book_title>/<string:book_isbn>")
-@login_required
 def booktitle(book_title, book_isbn):
     """List details about a single book."""
 
@@ -152,7 +134,6 @@ def booktitle(book_title, book_isbn):
 
 #search by author
 @app.route("/books_author", methods=["POST"])
-@login_required
 def books_author():
     author=request.form.get("author")
     author=author+'%'
@@ -164,7 +145,6 @@ def books_author():
 
 #Specific book
 @app.route("/books_author/<string:book_author>/<string:book_isbn>")
-@login_required
 def bookauthor(book_author, book_isbn):
     """List details about a single book."""
 
@@ -177,7 +157,6 @@ def bookauthor(book_author, book_isbn):
 
 #INSERT A REVIEW
 @app.route("/review/<string:book_isbn>", methods=["POST", "GET"])
-@login_required
 def review(book_isbn):
 
     #Get information
@@ -213,5 +192,3 @@ def book_api(book_isbn):
         })
 
  """
-
- #=======================================================================
