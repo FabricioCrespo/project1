@@ -1,0 +1,65 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    BOOK!
+{% endblock %}
+
+{% block body %}
+    <h1>Book Details</h1>
+
+    <ul> 
+        <form action="{{ url_for('logout') }}" method="post">
+                LOGOUT?<br><br>
+                <div class="form-group">
+                    <input type="submit" value="Logout"><br><br>
+                </div>
+        </form>
+
+
+        {% for book in books %}
+        <li>ISBN: {{ book.isbn }}</li>
+        <li>TITLE: {{ book.title }}</li>
+        <li>AUTHOR: {{ book.author}}</li>
+        <li>YEAR: {{ book.year}}</li>
+        <h2>Do you want to do a review for this book?</h2>
+    
+        <p>Please select your review for this book: 1 is lowest and 5 highest and let us your opinion</p>
+        
+            <form action="{{ url_for('review', book_isbn=book.isbn) }}" method="post">
+                <p>
+              
+                  Review:<br>
+              
+                  <label><input type="radio" name="review" value="1"> 1</label><br>
+              
+                  <label><input type="radio" name="review" value="2"> 2</label><br>
+              
+                  <label><input type="radio" name="review" value="3"> 3</label><br>
+
+                  <label><input type="radio" name="review" value="4"> 4</label><br>
+
+                  <label><input type="radio" name="review" value="5"> 5</label><br>
+
+                  <label><input class="form-control" name="opinion_review" type="text" placeholder="Opinion about this book"> </label><br>
+                </p>
+                <p><input type="submit" value="Enviar datos"></p>
+            </form>
+        
+
+        <h2>Reviews average for this book:</h2>
+             {% for review_avg in reviews_avg %} 
+
+                <li> {{review_avg.average}} based on {{review_avg.count}} ratings.</li>
+
+             {% endfor %}
+
+        <h2> Reviews for this book:</h2>
+       
+            {% for review in reviews %}
+
+                <li> {{review.username_review}} gives {{review.review}} and comment: {{review.review_opinion}}</li>            
+
+            {% endfor %}
+        {% endfor %}
+    </ul> <br>       
+{% endblock %}

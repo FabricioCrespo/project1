@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Success!
+{% endblock %}
+
+{% block body %}
+    <h1>Success!</h1>
+
+    Welcome to this website! <br><br>
+
+    <form action="{{ url_for('logout') }}" method="post">
+        LOGOUT?<br><br>
+        <div class="form-group">
+            <input type="submit" value="Logout"><br><br>
+        </div>
+    </form>
+
+    <br><br> Please, find the following information: <br> <br>
+
+    <!--SOLO FUNCIONA CON METHOD POST-->
+    <form action="{{ url_for('books_isbn') }}" method="post">
+        <div class="form-group"> Search by the ISBN <BR><br>
+            ISBN   <input name="isbn" type="text"> 
+            <input type="submit" value="Search"><br><br>
+        </div>
+    </form>
+
+    <form action="{{ url_for('books_title') }}" method="post">
+        <div class="form-group"> Search by the Title <BR><br>
+            TITLE  <input name="title" type="text"> 
+            <input type="submit" value="Search"><br><br>
+        </div>
+    </form> 
+    <form action="{{ url_for('books_author') }}" method="post">
+        <div class="form-group"> Search by the Author <br><br>
+            AUTHOR <input name="author" type="text">
+            <input type="submit" value="Search"><br><br>
+        </div>
+    </form> 
+{% endblock %}

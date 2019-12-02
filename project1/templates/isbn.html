@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Books!
+{% endblock %}
+
+{% block body %}
+    <form action="{{ url_for('logout') }}" method="post">
+        LOGOUT?<br><br>
+        <div class="form-group">
+            <input type="submit" value="Logout"><br><br>
+        </div>
+    </form>
+
+     <h1>All Books with your isbn</h1>
+
+    <ul>
+            {% for book in books %}
+                <li>
+                    <a href="{{ url_for('bookisbn', book_isbn=book.isbn) }}">
+                        {{ book.title }}  by {{book.author}}
+                </li>
+            {% endfor %}
+    </ul>
+{% endblock %}
