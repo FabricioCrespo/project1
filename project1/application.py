@@ -27,9 +27,12 @@ app.config["SECRET_KEY"] = "my secret key"
 engine = create_engine("postgres://kjkmtwcexbgcrx:522c649866896ff5bddbbbb0c53f2dec216fb496e6590bdce81f42e5aba9f313@ec2-174-129-253-47.compute-1.amazonaws.com:5432/d98hjgkripkjc5")
 db = scoped_session(sessionmaker(bind=engine))
 
-#-=====================DEFINE A DECORATOR TO AVOID CACHE=======================================
+#=======================GOODREADS KEY==========================================================
+key=os.getenv("GOODREADS_KEY")
 
-#=====================DEFINE ROUTES============================
+#===============================================================================================
+
+#-=====================DEFINE A DECORATOR TO AVOID CACHE=======================================
 
 @app.after_request
 def add_header(response):
@@ -37,6 +40,8 @@ def add_header(response):
     if 'Cache-Control' not in response.headers:
         response.headers['Cache-Control'] = 'no-store'
     return response
+
+#=====================DEFINE ROUTES============================
 
 @app.route("/")
 def index():
@@ -113,11 +118,20 @@ def books_isbn():
 def bookisbn(book_isbn):
     """List details about a single book."""
 
-    # Make sure flight exists.
-    books=db.execute("SELECT * FROM books WHERE (isbn=:book_isbn)", {"book_isbn": book_isbn})
+    #GOODREADS KEY
+    query=requests.get("https://www.goodreads.com/book/review_counts.json",
+        params={"key": key, "isbns": book_isbn})
+    # Make sure book exists.
+    book=db.execute("SELECT * FROM books WHERE (isbn=:book_isbn)", {"book_isbn": book_isbn})
     reviews=db.execute("SELECT * FROM reviews WHERE (isbn_review=:book_isbn)", {"book_isbn": book_isbn})
     reviews_avg= db.execute ("SELECT round(avg(review::integer),1) as average, count(*) as count from reviews where (isbn_review =:book_isbn)", {"book_isbn": book_isbn})
     db.commit()
+    #GOODREADS
+    book_goodreads=query.json()
+    book_goodreads=book_goodreads['books'][0]
+    #DATABASE
+    books=book.fetchall()
+    books.append(book_goodreads)
     return render_template("book.html", books=books, reviews=reviews, reviews_avg=reviews_avg)
 
 #search by title
@@ -135,11 +149,20 @@ def books_title():
 def booktitle(book_title, book_isbn):
     """List details about a single book."""
 
-    # Make sure flight exists.
-    books=db.execute("SELECT * FROM books WHERE (title=:book_title)", {"book_title": book_title})
+    #GOODREADS KEY
+    query=requests.get("https://www.goodreads.com/book/review_counts.json",
+        params={"key": key, "isbns": book_isbn})
+    # Make sure book exists.
+    book=db.execute("SELECT * FROM books WHERE (title=:book_title)", {"book_title": book_title})
     reviews=db.execute("SELECT * FROM reviews WHERE (isbn_review=:book_isbn)", {"book_isbn": book_isbn})
     reviews_avg= db.execute ("SELECT round(avg(review::integer),1) as average , count(*) as count from reviews where (isbn_review =:book_isbn)", {"book_isbn": book_isbn})
     db.commit()
+    #GOODREADS
+    book_goodreads=query.json()
+    book_goodreads=book_goodreads['books'][0]
+    #DATABASE
+    books=book.fetchall()
+    books.append(book_goodreads)
     return render_template("book.html", books=books, reviews=reviews, reviews_avg=reviews_avg)
 
 #search by author
@@ -158,11 +181,20 @@ def books_author():
 def bookauthor(book_author, book_isbn):
     """List details about a single book."""
 
-    # Make sure flight exists.
-    books=db.execute("SELECT * FROM books WHERE (author=:book_author) and (isbn=:book_isbn)", {"book_author": book_author, "book_isbn":book_isbn})
+    #GOODREADS KEY
+    query=requests.get("https://www.goodreads.com/book/review_counts.json",
+        params={"key": key, "isbns": book_isbn})
+    # Make sure book exists.
+    book=db.execute("SELECT * FROM books WHERE (author=:book_author) and (isbn=:book_isbn)", {"book_author": book_author, "book_isbn":book_isbn})
     reviews=db.execute("SELECT * FROM reviews WHERE (isbn_review=:book_isbn)", {"book_isbn": book_isbn})
     reviews_avg= db.execute ("SELECT round(avg(review::integer),1) as average, count(*) as count from reviews where (isbn_review =:book_isbn)", {"book_isbn": book_isbn})
     db.commit()
+    #GOODREADS
+    book_goodreads=query.json()
+    book_goodreads=book_goodreads['books'][0]
+    #DATABASE
+    books=book.fetchall()
+    books.append(book_goodreads)
     return render_template("book.html", books=books, reviews=reviews, reviews_avg=reviews_avg)
 
 #INSERT A REVIEW
@@ -189,11 +221,9 @@ def review(book_isbn):
 @app.route("/api/books/<book_isbn>")
 def book_api(book_isbn):
 
-    key=os.getenv("GOODREADS_KEY")
-
     query=requests.get("https://www.goodreads.com/book/review_counts.json",
         params={"key": key, "isbns": book_isbn})
-
+    
     book_goodreads=query.json()
 
     book_goodreads=book_goodreads['books'][0]

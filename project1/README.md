@@ -1,10 +1,17 @@
 # Project 1
 
+#=============================PROJECT 1========================================
+#==========================WEB PROGRAMMING========================
+#=========================NAME: JONNATHAN FABRICIO CRESPO YAGUANA=============
+#==========================DATE: DECEMBER 2019=================================
+
 This porject is about the creation of a web application to search books inside a database. You cand search a book by its isbn, title or author. Either users or books should be on the database server.
 
 Flask is provided for this project. It let us load different pages to access to information.
 
-My project1 has two python files. The first one has the application. Here are declared the different routes for the web application and the instruccions to access to the database too. The second one is the file import.py which let us import all the books to the databse.
+My project1 has two python files. The first one has the application. Here are declared the different routes for the web application and the instruccions to access to the database too. The second one is the file import.py which let us import all the books to the database.
+
+There is sql file called database.sql. Here are all the queries to create tables or get information from de database serve.
 
 There is a folder called templates. It has the different HTML files that I have used to render the app.routes.They are:
 ---author.html: display all the books matches with the authors of the data base. The same funcionality for title.html and isbn.html

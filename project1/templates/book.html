@@ -7,16 +7,18 @@
 {% block content %}
     <h1>Book Details</h1>
 
-        {% for book in books %}
-        <li>ISBN: {{ book.isbn }}</li>
-        <li>TITLE: {{ book.title }}</li>
-        <li>AUTHOR: {{ book.author}}</li>
-        <li>YEAR: {{ book.year}}</li>
+        
+        <li>ISBN: {{ books[0].isbn }}</li>
+        <li>TITLE: {{ books[0].title }}</li>
+        <li>AUTHOR: {{ books[0].author}}</li>
+        <li>YEAR: {{ books[0].year}}</li>
+        <li>Review counts from GOODREADS: {{books[1]['work_reviews_count']}}</li>
+        <li>Average rating from GOODREADS: {{books[1]['average_rating']}}</li>
         <h2>Do you want to do a review for this book?</h2>
     
         <p>Please select your review for this book: 1 is lowest and 5 highest and let us your opinion</p>
         
-            <form action="{{ url_for('review', book_isbn=book.isbn) }}" method="post">
+            <form action="{{ url_for('review', book_isbn=books[0].isbn) }}" method="post">
                 <p>
               
                   Review:<br>
@@ -35,7 +37,7 @@
                 </p>
                 <p><input type="submit" value="Enviar datos"></p>
             </form>
-        <h2>Reviews average for this book:</h2>
+        <h2>Reviews average for this book on this page:</h2>
              {% for review_avg in reviews_avg %} 
 
                 <li> {{review_avg.average}} based on {{review_avg.count}} ratings.</li>
@@ -49,6 +51,5 @@
                 <li> {{review.username_review}} gives {{review.review}} and comment: {{review.review_opinion}}</li>            
 
             {% endfor %}
-        {% endfor %}
  <br>       
 {% endblock %}

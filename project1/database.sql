@@ -1,4 +1,6 @@
 
+--=====================DATABASE STATEMENS TO GET INFORMATION=====================================
+
 --CREANDO TABLA PARA LOS USUARIOS
 
 CREATE TABLE users (
@@ -40,10 +42,6 @@ CREATE TABLE reviews (
 
 select avg(review::integer) from reviews where isbn_review= :isbn_book;
 
-1
-2
 ALTER TABLE reviews ADD COLUMN review_opinion varchar;
 
 SELECT round(avg(review::integer),1) as average, count(*) as count from reviews;
-
-DELETE FROM reviews WHERE username_review= 'FabricioCrespo' or username_review= 'BelenArias' or username_review= 'BrianCrespo';
