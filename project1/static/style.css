@@ -1,0 +1,39 @@
+.header {
+    background: url("../static/background.jpeg") no-repeat center;
+    background-size: cover;
+    min-height: 100vh;
+}
+
+.header .navbar {
+    background-color: transparent !important;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: 20rem 100px;
+    background: white;
+}
+
+#recuadro {
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    border-radius: 15px;
+    padding: 300px;
+    padding-top: 20px;
+    margin-left: 50px;
+    margin-right: 50px;
+}
+
+.custom-nav {
+    border: 0px;
+    padding: 0;
+    box-shadow: 0 0 20px rgba(230, 134, 9, 0.5);
+}
+
+.header .navbar {
+    background-color: transparent !important;
+}
+
+h1, h2 {
+    color: rgba(37, 83, 236, 0.411);
+}

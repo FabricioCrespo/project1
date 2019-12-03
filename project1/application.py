@@ -1,31 +1,35 @@
-import os
+#=============================PROJECT 1========================================
+#==========================WEB PROGRAMMING========================
+#=========================NAME: JONNATHAN FABRICIO CRESPO YAGUANA=============
+#==========================DATE: DECEMBER 2019=================================
 
-from flask import Flask, session, render_template, request, jsonify
+#=========IMPORT STATEMENTS======================
+import os
+from flask import Flask, session, render_template, request, jsonify, redirect
 from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 import requests
 
-
+#=================FLASK STATEMENTS====================================
 
 app = Flask(__name__)
 
-# Check for environment variable
-#if not os.getenv("postgres://kjkmtwcexbgcrx:522c649866896ff5bddbbbb0c53f2dec216fb496e6590bdce81f42e5aba9f313@ec2-174-129-253-47.compute-1.amazonaws.com:5432/d98hjgkripkjc5"):
-#    raise RuntimeError("DATABASE_URL is not set")
-
 # Configure session to use filesystem
-app.config["SESSION_PERMANENT"] = False
-app.config["SESSION_TYPE"] = "filesystem"
+#app.config["SESSION_PERMANENT"] = False
+#app.config["SESSION_TYPE"] = "filesystem"
+app.config["SECRET_KEY"] = "my secret key"
 
 
-Session(app)
+#Session(app)
 
 # Set up database
 engine = create_engine("postgres://kjkmtwcexbgcrx:522c649866896ff5bddbbbb0c53f2dec216fb496e6590bdce81f42e5aba9f313@ec2-174-129-253-47.compute-1.amazonaws.com:5432/d98hjgkripkjc5")
 db = scoped_session(sessionmaker(bind=engine))
 
-#-=====================DEFINE A DECORATOR=======================================
+#-=====================DEFINE A DECORATOR TO AVOID CACHE=======================================
+
+#=====================DEFINE ROUTES============================
 
 @app.after_request
 def add_header(response):
@@ -45,7 +49,8 @@ def login():
     username = request.form.get("username") #variable recibida del campo username de indeX.html
     password= request.form.get("password")
     #Session close
-    session.pop('user', None)
+    #session.pop('user', None)
+    session.clear()
 
     # Make sure user exist.
     if db.execute("SELECT * FROM users WHERE (username = :username) and (password = :password)", {"username":username, "password":password}).rowcount==0:
@@ -54,7 +59,8 @@ def login():
     if db.execute("SELECT * FROM users WHERE (username = :username) and (password = :password) and (count_state='True')", {"username":username, "password":password}).rowcount==1:
         return render_template("error.html", message="You have already login in your account")
     #ACTIVE SESSION
-    session['user']=username
+    session['username']=username
+    session.permanent = True
     #If user login, count_state=True
     db.execute("UPDATE users SET count_state=True  WHERE (username = :username) and (password = :password)", {"username":username, "password":password})
     db.commit()
@@ -74,17 +80,17 @@ def signup():
     db.commit()
     return render_template("success.html")
 
-@app.route("/logout", methods=["POST"])
+@app.route("/logout", methods=["get"])
 def logout():
     #Get username
-    user1=session['user']
+    user1=session['username']
     #Update user_account
     db.execute("UPDATE users SET count_state=False  WHERE (username = :username)", {"username":user1})
     db.commit()
     #close session
-    #session.pop('user', None)
+    session.pop('user', None)
     session.clear()
-    return render_template("index.html")
+    return redirect("/")
 
 #Search by isbn
 @app.route("/books_isbn", methods=["POST", "GET"])
@@ -171,6 +177,7 @@ def review(book_isbn):
     db.commit()
     return render_template("review_success.html", message="Your review has been updated!") 
 
+#=====================================================================
 """ @app.route("/api/books/<book_isbn>")
 def book_api(book_isbn):
 

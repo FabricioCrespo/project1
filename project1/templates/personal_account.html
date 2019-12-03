@@ -4,19 +4,12 @@
     Success!
 {% endblock %}
 
-{% block body %}
+{% block content %}
     <h1>Success!</h1>
 
     Welcome to this website! <br><br>
 
-    <form action="{{ url_for('logout') }}" method="post">
-        LOGOUT?<br><br>
-        <div class="form-group">
-            <input type="submit" value="Logout"><br><br>
-        </div>
-    </form>
-
-    <br><br> Please, find the following information: <br> <br>
+    <br><br> Please, find the following information: <br> <br> <br> <br>
 
     <!--SOLO FUNCIONA CON METHOD POST-->
     <form action="{{ url_for('books_isbn') }}" method="post">

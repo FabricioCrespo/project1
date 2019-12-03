@@ -4,15 +4,15 @@
     Books!
 {% endblock %}
 
-{% block body %}
+{% block content %}
 
     <h1>Welcome to my DATABASE</h1>
     <form action="{{ url_for('login') }}" method="post">
         PLEASE, LOG IN<br><br>
         <div class="form-group">
-            <input class="form-control" name="username" type="text" placeholder="Username" > <br><br>
-            <input class="form-control" name="password" type="password" placeholder="Password" ><br><br>
-            <input type="submit" value="Login"><br><br>
+            <input name="username" type="text" placeholder="Username" > <br><br>
+            <input name="password" type="password" placeholder="Password" ><br><br>
+            <button id="login" class="btn btn-primary" type="submit">Login</button><br><br>
         </div>
     </form>
 
@@ -23,10 +23,7 @@
             <input name="password1" type="password" placeholder="Password"><br><br>
             <input name="name" type="text" placeholder="Name"> <br><br>
             <input name="lastname" type="text" placeholder="Lastname"> <br><br>
-            <input type="submit" value="Sing up">
+            <button id="signup" class="btn btn-primary" type="submit"> Signup</button>
         </div>
     </form> 
-  
-  
-
 {%endblock%}

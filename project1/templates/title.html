@@ -4,14 +4,7 @@
     Books!
 {% endblock %}
 
-{% block body %}
-    <form action="{{ url_for('logout') }}" method="post">
-        LOGOUT?<br><br>
-        <div class="form-group">
-            <input type="submit" value="Logout"><br><br>
-        </div>
-    </form>
-
+{% block content %}
      <h1>All Books with your Title</h1>
 
     <ul>

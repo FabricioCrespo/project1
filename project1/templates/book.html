@@ -4,17 +4,8 @@
     BOOK!
 {% endblock %}
 
-{% block body %}
+{% block content %}
     <h1>Book Details</h1>
-
-    <ul> 
-        <form action="{{ url_for('logout') }}" method="post">
-                LOGOUT?<br><br>
-                <div class="form-group">
-                    <input type="submit" value="Logout"><br><br>
-                </div>
-        </form>
-
 
         {% for book in books %}
         <li>ISBN: {{ book.isbn }}</li>
@@ -61,5 +52,5 @@
 
             {% endfor %}
         {% endfor %}
-    </ul> <br>       
+ <br>       
 {% endblock %}
