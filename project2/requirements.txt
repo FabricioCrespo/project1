@@ -1,6 +1,0 @@
-Flask
-Flask-SocketIO
-from collections import deque
-from flask import Flask, render_template, session, request, redirect
-from flask_socketio import SocketIO, send, emit, join_room, leave_room
-from functools import wraps #Para login_required
