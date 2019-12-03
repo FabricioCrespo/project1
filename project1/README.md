@@ -31,3 +31,11 @@ There is a folder called templates. It has the different HTML files that I have 
 Finally, there is the folder called static. It has the stylesheet.css and images that I has used for the design of the web application.
 
 Thank you for readme. I hope that you enjoy the web application.
+
+
+======================IMPORTANT=================================
+Run on the console:
+export GOODREADS_KEY=Qh4ZdE5NsRWT8F8Rb2e1zQ
+export FLASK_APP=application.py
+export FLASK_DEBUG=1
+flask run
