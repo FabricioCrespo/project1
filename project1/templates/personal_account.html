@@ -9,26 +9,10 @@
 
     Welcome to this website! <br><br>
 
-    <br><br> Please, find the following information: <br> <br> <br> <br>
-
-    <!--SOLO FUNCIONA CON METHOD POST-->
-    <form action="{{ url_for('books_isbn') }}" method="post">
-        <div class="form-group"> Search by the ISBN <BR><br>
-            ISBN   <input name="isbn" type="text"> 
-            <input type="submit" value="Search"><br><br>
-        </div>
+    <br><br> Please, press the button to begin to search books! <br> <br> <br> <br>
+    <form action="{{ url_for('begin_to_search') }}" method="get">
+            <div class="form-group"> <BR><br>
+                <button id="signup" class="btn btn-primary" type="submit"> Bengin to search!</button>
+            </div>
     </form>
-
-    <form action="{{ url_for('books_title') }}" method="post">
-        <div class="form-group"> Search by the Title <BR><br>
-            TITLE  <input name="title" type="text"> 
-            <input type="submit" value="Search"><br><br>
-        </div>
-    </form> 
-    <form action="{{ url_for('books_author') }}" method="post">
-        <div class="form-group"> Search by the Author <br><br>
-            AUTHOR <input name="author" type="text">
-            <input type="submit" value="Search"><br><br>
-        </div>
-    </form> 
 {% endblock %}

@@ -66,6 +66,10 @@ def login():
     db.commit()
     return render_template("personal_account.html")
 
+@app.route("/begin_to_search")
+def begin_to_search():
+    return render_template("search.html")
+
 @app.route("/signup", methods=["POST"])
 def signup():
 
@@ -117,7 +121,7 @@ def bookisbn(book_isbn):
     return render_template("book.html", books=books, reviews=reviews, reviews_avg=reviews_avg)
 
 #search by title
-@app.route("/books_title", methods=["POST"])
+@app.route("/books_title", methods=["POST", "GET"])
 def books_title():
     title=request.form.get("title")
     if db.execute("SELECT * FROM books WHERE (title = :title)", {"title":title}).rowcount==0:
@@ -139,7 +143,7 @@ def booktitle(book_title, book_isbn):
     return render_template("book.html", books=books, reviews=reviews, reviews_avg=reviews_avg)
 
 #search by author
-@app.route("/books_author", methods=["POST"])
+@app.route("/books_author", methods=["POST", "GET"])
 def books_author():
     author=request.form.get("author")
     author=author+'%'
@@ -166,7 +170,7 @@ def bookauthor(book_author, book_isbn):
 def review(book_isbn):
 
     #Get information
-    user1=session['user']
+    user1=session['username']
     book_review=request.form.get("review")
     opinion_review=request.form.get("opinion_review")
     if db.execute("SELECT * FROM reviews WHERE (username_review = :username) and (isbn_review = :isbn_review)", {"username":user1, "isbn_review":book_isbn}).rowcount>=1:
