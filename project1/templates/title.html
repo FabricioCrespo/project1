@@ -12,7 +12,6 @@
                 <li>
                     <a href="{{ url_for('booktitle', book_title=book.title, book_isbn=book.isbn) }}">
                         {{ book.title }}  by {{book.author}}
-                    </li>
                 </li>
             {% endfor %}
     </ul>

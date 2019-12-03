@@ -181,25 +181,38 @@ def review(book_isbn):
     db.commit()
     return render_template("review_success.html", message="Your review has been updated!") 
 
-#=====================================================================
-""" @app.route("/api/books/<book_isbn>")
+#====================================================================="
+
+#====================GOODREADS reviews=================================
+
+#
+@app.route("/api/books/<book_isbn>")
 def book_api(book_isbn):
+
+    key=os.getenv("GOODREADS_KEY")
+
+    query=requests.get("https://www.goodreads.com/book/review_counts.json",
+        params={"key": key, "isbns": book_isbn})
+
+    book_goodreads=query.json()
+
+    book_goodreads=book_goodreads['books'][0]
+    
+    if book_goodreads is None:
+        return jsonify({"error": "Invalid book_isbn"}), 422
 
 
     # Make sure flight exists.
-    #books=db.execute("SELECT * FROM books WHERE (isbn=:book_isbn)", {"book_isbn": book_isbn})
-    books= Book.query.get(book_isbn)
+    specific_book=db.execute("SELECT * FROM books WHERE (isbn=:book_isbn)", {"book_isbn": book_isbn})
+    book=specific_book.fetchall()
 
-    #reviews_avg= db.execute ("SELECT round(avg(review::integer),1) as average, count(*) as count from reviews where (isbn_review =:book_isbn)", {"book_isbn": book_isbn})
-    #db.commit()
-    if books is None:
-        return jsonify({"error": "Invalid book_isbn"}), 422
-    
+    book.append(book_goodreads)
+
     return jsonify({
-            "Author": books.author,
-            "Title": books.title,
-            "Year": books.year,
-            "ISBN": books.isbn
+            "Author": book[0].author,
+            "Title": book[0].title,
+            "Year": book[0].year,
+            "ISBN": book[0].isbn,
+            "Review count": book[1]['work_reviews_count'],
+            "Average rating": book[1]['average_rating']
         })
-
- """
