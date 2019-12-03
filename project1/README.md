@@ -5,7 +5,7 @@
 #=========================NAME: JONNATHAN FABRICIO CRESPO YAGUANA=============
 #==========================DATE: DECEMBER 2019=================================
 
-This porject is about the creation of a web application to search books inside a database. You cand search a book by its isbn, title or author. Either users or books should be on the database server.
+This project is about the creation of a web application to search books inside a database. You cand search a book by its isbn, title or author. Either users or books should be on the database server.
 
 Flask is provided for this project. It let us load different pages to access to information.
 
